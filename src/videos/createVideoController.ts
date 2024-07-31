@@ -16,7 +16,21 @@ const inputValidation = (video: InputVideoType) => {
             message: 'error!!!!', field: 'availableResolution'
         })
     }
-    return errors
+
+    if (typeof video.title !== 'string') {
+        errors.errorsMessages.push({
+            message: `Field title should be a 'string'. Current: '${typeof video.title}'`,
+            field: 'title'
+        })
+    }
+
+    if (typeof video.author !== 'string') {
+        errors.errorsMessages.push({
+            message: `Field author should be a 'string'. Current: '${typeof video.author}'`,
+            field: 'author'
+        })
+    }
+        return errors
 }
 
 export const createVideoController = (req: Request<any, any, InputVideoType>, res: Response<any /*OutputVideoType*/ | OutputErrorsType>) => {
@@ -37,7 +51,7 @@ export const createVideoController = (req: Request<any, any, InputVideoType>, re
     // если всё ок - добавляем видео
     const newVideo: VideoDBType = {
         ...req.body,
-        id: Date.now() + Math.random(),
+        id: dateNow + Math.random(),
         canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: createdAtISO,
