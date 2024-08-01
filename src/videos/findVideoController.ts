@@ -1,18 +1,18 @@
 import {Request, Response} from 'express'
 import {db} from '../db/db'
-import {OutputVideoType} from "../input-output-types/video-types";
+import {OutputVideoType, VideoIdType} from "../input-output-types/video-types";
 
-export const findVideoController = (req: Request<{id: number}>, res: Response<OutputVideoType[]>) => {
-    const videos = db.videos[req.params.id] // получаем видео из базы данных
 
-    if (!videos) {
-        res.sendStatus(404)
-        return
+export const findVideoController = (req: Request<VideoIdType>, res: Response<OutputVideoType[]>) => {
+    const video = db.videos.find(video => video.id === +req.params.id) // получаем видео из базы данных
+
+    if (!video) {
+        res.sendStatus(404);
+        return;
     }
 
     res
         .status(200)
-        .json(videos) // отдаём видео в качестве ответа
+        .json(video) // отдаём видео в качестве ответа
 }
 
-// не забудьте добавить эндпоинт в апп
