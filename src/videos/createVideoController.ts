@@ -1,4 +1,4 @@
-import {Response, Request} from 'express'
+import {Request, Response} from 'express'
 import {OutputErrorsType} from '../input-output-types/output-errors-type'
 import {db} from '../db/db'
 import {InputVideoType, OutputVideoType, Resolutions} from '../input-output-types/video-types'
@@ -9,11 +9,11 @@ const inputValidation = (video: InputVideoType) => {
         errorsMessages: []
     }
 // ...
-    if (!Array.isArray(video.availableResolution)
-        || video.availableResolution.find(p => !Resolutions[p])
+    if (!Array.isArray(video.availableResolutions)
+        || video.availableResolutions.find(p => !Resolutions[p])
     ) {
         errors.errorsMessages.push({
-            message: 'error!!!!', field: 'availableResolution'
+            message: 'error!!!!', field: 'availableResolutions'
         })
     }
 

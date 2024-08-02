@@ -22,13 +22,13 @@ export type OutputVideoType = {
     minAgeRestriction: null
     createdAt: string
     publicationDate: string
-    availableResolution: Resolutions[]
+    availableResolutions: Resolutions[]
 }
 
 export type InputVideoType = {
     title: string
     author: string
-    availableResolution: Resolutions[]
+    availableResolutions: Resolutions[]
 }
 
 export type VideoIdType = {
@@ -38,7 +38,7 @@ export type VideoIdType = {
 export type InputParamsVideoType = {
     title: string,
     author: string,
-    availableResolution: Resolutions[],
+    availableResolutions: Resolutions[],
     canBeDownloaded: boolean,
     minAgeRestriction: number
 }

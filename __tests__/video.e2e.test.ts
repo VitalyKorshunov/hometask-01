@@ -29,7 +29,7 @@ describe('/videos', () => {
         video1 = {
             title: 'Video1',
             author: 'Vitaly',
-            availableResolution: [Resolutions.P360]
+            availableResolutions: [Resolutions.P360]
         }
 
         const res = await req
@@ -77,7 +77,7 @@ describe('/videos', () => {
         video3 = {
             title: 'Video3',
             author: 'Ivan',
-            availableResolution: [Resolutions.P360]
+            availableResolutions: [Resolutions.P360]
         }
 
         const res = await req

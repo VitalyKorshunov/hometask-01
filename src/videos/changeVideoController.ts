@@ -40,8 +40,8 @@ const inputValidation = (query: InputParamsVideoType) => {
     }
 
     // @ts-ignore
-    if (validFields.includes(query.availableResolution) && (!Array.isArray(query.availableResolution)
-        || query.availableResolution.find(p => !Resolutions[p]))
+    if (validFields.includes(query.availableResolutions) && (!Array.isArray(query.availableResolutions)
+        || query.availableResolutions.find(p => !Resolutions[p]))
     ) {
         errors.errorsMessages.push({
             message: 'error!!!!', field: 'availableResolution'
