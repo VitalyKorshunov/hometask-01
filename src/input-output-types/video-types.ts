@@ -34,3 +34,11 @@ export type InputVideoType = {
 export type VideoIdType = {
     id: number
 }
+
+export type InputParamsVideoType = {
+    title: string,
+    author: string,
+    availableResolution: Resolutions[],
+    canBeDownloaded: boolean,
+    minAgeRestriction: number
+}
