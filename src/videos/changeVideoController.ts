@@ -3,7 +3,7 @@ import {db} from '../db/db'
 import {InputParamsVideoType, Resolutions} from "../input-output-types/video-types";
 import {OutputErrorsType} from "../input-output-types/output-errors-type";
 
-const inputValidation = (query: InputParamsVideoType) => {
+const inputValidation = (changedVideo: InputParamsVideoType) => {
     const errors: OutputErrorsType = {
         errorsMessages: []
     }
@@ -12,7 +12,7 @@ const inputValidation = (query: InputParamsVideoType) => {
 
     const invalidFields = [];
 
-    for (const key in query) {
+    for (const key in changedVideo) {
         if (!validFields.includes(key)) {
             invalidFields.push(key)
         }
@@ -26,38 +26,42 @@ const inputValidation = (query: InputParamsVideoType) => {
 
     }
 
-    if (query.title.length >= 40 || query.title.length < 1) {
+    if (typeof changedVideo.title !== 'string'
+        || changedVideo.title.length >= 40
+        || changedVideo.title.length < 1) {
         errors.errorsMessages.push({
             message: 'field length must be in the range 1-40',
             field: 'title'
         })
     }
 
-    if ((query.author.length >= 20 || query.author.length < 1)) {
+    if (typeof changedVideo.author !== 'string'
+        || changedVideo.author.length >= 20
+        || changedVideo.author.length < 1) {
         errors.errorsMessages.push({
             message: 'field length must be in the range 1-20',
             field: 'author'
         })
     }
 
-    if (!Array.isArray(query.availableResolutions)
-        || query.availableResolutions.find(p => !Resolutions[p])
+    if (!Array.isArray(changedVideo.availableResolutions)
+        || changedVideo.availableResolutions.find(p => !Resolutions[p])
     ) {
         errors.errorsMessages.push({
             message: 'error!!!!', field: 'availableResolution'
         })
     }
 
-    if (typeof query.canBeDownloaded !== 'boolean') {
+    if (typeof changedVideo.canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({
             message: 'field must be boolean type',
             field: 'canBeDownloaded'
         })
     }
 
-    if (typeof query.minAgeRestriction !== 'number'
-        || query.minAgeRestriction > 18
-        || query.minAgeRestriction < 1) {
+    if (typeof changedVideo.minAgeRestriction !== 'number'
+        || changedVideo.minAgeRestriction > 18
+        || changedVideo.minAgeRestriction < 1) {
         errors.errorsMessages.push({
             message: 'field must be number type and in the range 1-18',
             field: 'minAgeRestriction'
