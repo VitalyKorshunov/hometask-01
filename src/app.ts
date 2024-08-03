@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import {SETTINGS} from "./settings";
-import {getVideosController} from "./videos/getVideosController";
 import {videosRouter} from "./videos";
 import {testingRouter} from "./testing";
 
@@ -11,10 +10,10 @@ app.use(cors()) // разрешить любым фронтам делать з�
 
 app.get('/', (req, res) => {
     // эндпоинт, который будет показывать на верселе какая версия бэкэнда сейчас залита
-    res.status(200).json({version: '1.04'})
+    res.status(200).json({version: '1.05'})
 })
 
-// app.get(SETTINGS.PATH.VIDEOS, getVideosController)
+
 app.use(SETTINGS.PATH.TESTING_ALL_DATA, testingRouter)
 
 app.use(SETTINGS.PATH.VIDEOS, videosRouter)

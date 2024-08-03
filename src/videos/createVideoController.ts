@@ -17,20 +17,25 @@ const inputValidation = (video: InputVideoType) => {
         })
     }
 
-    if (typeof video.title !== 'string') {
+    if (typeof video.title !== 'string'
+        || video.title.length >= 40
+        || video.title.length < 1) {
         errors.errorsMessages.push({
             message: `Field title should be a 'string'. Current: '${typeof video.title}'`,
             field: 'title'
         })
     }
 
-    if (typeof video.author !== 'string') {
+    if (typeof video.author !== 'string'
+        || video.author.length >= 20
+        || video.author.length < 1) {
         errors.errorsMessages.push({
             message: `Field author should be a 'string'. Current: '${typeof video.author}'`,
             field: 'author'
         })
     }
-        return errors
+
+    return errors
 }
 
 export const createVideoController = (req: Request<any, any, InputVideoType>, res: Response<OutputVideoType | OutputErrorsType>) => {
