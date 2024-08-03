@@ -40,5 +40,6 @@ export type InputParamsVideoType = {
     author: string,
     availableResolutions: Resolutions[],
     canBeDownloaded: boolean,
-    minAgeRestriction: number
+    minAgeRestriction: number,
+    publicationDate: string
 }

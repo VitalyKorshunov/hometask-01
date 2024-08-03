@@ -4,6 +4,20 @@ import {InputParamsVideoType, Resolutions} from "../input-output-types/video-typ
 import {OutputErrorsType} from "../input-output-types/output-errors-type";
 
 const inputValidation = (changedVideo: InputParamsVideoType) => {
+
+    function isValidISODate(dateString: string) {
+        try {
+            const date = new Date(`${dateString}`);
+            return date.toISOString() === dateString;
+        } catch (error) {
+            if (error instanceof RangeError) {
+                return false;
+            }
+
+            throw error;
+        }
+    }
+
     const errors: OutputErrorsType = {
         errorsMessages: []
     }
@@ -65,6 +79,13 @@ const inputValidation = (changedVideo: InputParamsVideoType) => {
         errors.errorsMessages.push({
             message: 'field must be number type and in the range 1-18',
             field: 'minAgeRestriction'
+        })
+    }
+
+    if (!isValidISODate(changedVideo.publicationDate)) {
+        errors.errorsMessages.push({
+            message: 'must be a valid date',
+            field: 'publicationDate'
         })
     }
 

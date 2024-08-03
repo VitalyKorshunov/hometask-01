@@ -168,7 +168,7 @@ describe('/videos', () => {
             ],
             canBeDownloaded: true,
             minAgeRestriction: 18,
-            publicationDate: new Date().toISOString()
+            publicationDate: '2024-08-03T21:13:05.387Z'
         }
 
         const changedVideo1 = Object.assign({}, video1, newData)
@@ -198,7 +198,7 @@ describe('/videos', () => {
             ],
             canBeDownloaded: true,
             minAgeRestriction: 18,
-            publicationDate: new Date().toISOString()
+            publicationDate: '2024-08-04T24:21:33.000Z'
         }
 
         const changedVideo1 = Object.assign({}, video1, newData)
