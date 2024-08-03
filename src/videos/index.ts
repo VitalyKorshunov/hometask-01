@@ -11,6 +11,6 @@ videosRouter.get('/', getVideosController)
 videosRouter.post('/', createVideoController)
 videosRouter.get('/:id', findVideoController)
 videosRouter.delete('/:id', deleteVideoController)
-videosRouter.patch('/:id', changeVideoController)
+videosRouter.put('/:id', changeVideoController)
 
 // не забудьте добавить роут в апп

@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import {db} from '../db/db'
-import {InputParamsVideoType, OutputVideoType, Resolutions, VideoIdType} from "../input-output-types/video-types";
+import {InputParamsVideoType, Resolutions} from "../input-output-types/video-types";
 import {OutputErrorsType} from "../input-output-types/output-errors-type";
 
 const inputValidation = (query: InputParamsVideoType) => {
@@ -8,7 +8,7 @@ const inputValidation = (query: InputParamsVideoType) => {
         errorsMessages: []
     }
 
-    const validFields: string[] = ['title', 'author', 'availableResolution', 'canBeDownloaded', 'minAgeRestriction']
+    const validFields: string[] = ['title', 'author', 'availableResolutions', 'canBeDownloaded', 'minAgeRestriction', 'publicationDate']
 
     const invalidFields = [];
 
@@ -23,39 +23,39 @@ const inputValidation = (query: InputParamsVideoType) => {
             message: 'Invalid field(s)',
             field: `${invalidFields}`
         })
+
     }
 
-    if (validFields.includes(query.title) && ([query.title].length >= 40 || [query.title].length < 1)) {
+    if (query.title.length >= 40 || query.title.length < 1) {
         errors.errorsMessages.push({
             message: 'field length must be in the range 1-40',
             field: 'title'
         })
     }
 
-    if (validFields.includes(query.author) && ([query.author].length >= 20 || [query.author].length < 1)) {
+    if ((query.author.length >= 20 || query.author.length < 1)) {
         errors.errorsMessages.push({
             message: 'field length must be in the range 1-20',
             field: 'author'
         })
     }
 
-    // @ts-ignore
-    if (validFields.includes(query.availableResolutions) && (!Array.isArray(query.availableResolutions)
-        || query.availableResolutions.find(p => !Resolutions[p]))
+    if (!Array.isArray(query.availableResolutions)
+        || query.availableResolutions.find(p => !Resolutions[p])
     ) {
         errors.errorsMessages.push({
             message: 'error!!!!', field: 'availableResolution'
         })
     }
 
-    if (validFields.includes(String(query.canBeDownloaded)) && typeof query.canBeDownloaded !== 'boolean') {
+    if (typeof query.canBeDownloaded !== 'boolean') {
         errors.errorsMessages.push({
             message: 'field must be boolean type',
             field: 'canBeDownloaded'
         })
     }
 
-    if (validFields.includes(String(query.minAgeRestriction)) && typeof query.minAgeRestriction !== 'number'
+    if (typeof query.minAgeRestriction !== 'number'
         || query.minAgeRestriction > 18
         || query.minAgeRestriction < 1) {
         errors.errorsMessages.push({
@@ -68,12 +68,13 @@ const inputValidation = (query: InputParamsVideoType) => {
 }
 
 export const changeVideoController = (req: Request<any>, res: Response<OutputErrorsType>) => {
-    const query = req.query
-    // @ts-ignore
-    const errors = inputValidation(query)
+    const body: any = req.body
+
+    const errors = inputValidation(body)
 
     if (errors.errorsMessages.length) {
         res.status(400).json(errors)
+        return;
     }
 
     const video = db.videos.find(video => video.id === +req.params.id) // получаем видео из базы данных
@@ -83,8 +84,8 @@ export const changeVideoController = (req: Request<any>, res: Response<OutputErr
         return;
     }
 
-    for (let key in query) {
-        video[key] = query[key]
+    for (let key in body) {
+        video[key] = body[key]
     }
 
     db.videos = db.videos.map((e) => (e.id === video.id) ? video : e)
