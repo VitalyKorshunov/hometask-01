@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import {db} from '../db/db'
-import {InputParamsVideoType, Resolutions} from "../input-output-types/video-types";
+import {InputParamsVideoType, Resolutions, validFields} from "../input-output-types/video-types";
 import {OutputErrorsType} from "../input-output-types/output-errors-type";
 
 const inputValidation = (changedVideo: InputParamsVideoType) => {
@@ -21,8 +21,6 @@ const inputValidation = (changedVideo: InputParamsVideoType) => {
     const errors: OutputErrorsType = {
         errorsMessages: []
     }
-
-    const validFields: string[] = ['title', 'author', 'availableResolutions', 'canBeDownloaded', 'minAgeRestriction', 'publicationDate']
 
     const invalidFields = [];
 

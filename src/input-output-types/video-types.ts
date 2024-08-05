@@ -43,3 +43,6 @@ export type InputParamsVideoType = {
     minAgeRestriction: number,
     publicationDate: string
 }
+
+export const validFields: string[] = ['title', 'author', 'availableResolutions', 'canBeDownloaded', 'minAgeRestriction', 'publicationDate']
+

@@ -3,8 +3,7 @@ import {req} from './test-helpers'
 // import {dataset1} from './datasets'
 import {SETTINGS} from '../src/settings'
 import {setDB} from "../src/db/db";
-import {dataset1} from "./datasets";
-import {InputVideoType, Resolutions} from "../src/input-output-types/video-types";
+import {Resolutions} from "../src/input-output-types/video-types";
 
 describe('/videos', () => {
     beforeAll(async () => { // очистка базы данных перед началом тестирования
@@ -16,12 +15,9 @@ describe('/videos', () => {
 
         const res = await req
             .get(SETTINGS.PATH.VIDEOS)
-            .expect(200, []) // проверяем наличие эндпоинта
+            .expect(200) // проверяем наличие эндпоинта
 
-        console.log(res.status) // можно посмотреть ответ эндпоинта
-        console.log(res.body) // можно посмотреть ответ эндпоинта
-
-        // expect(res.body.length).toBe(0) // проверяем ответ эндпоинта
+        expect(res.body.length).toBe(0) // проверяем ответ эндпоинта
     })
 
     let video1: any;
@@ -37,8 +33,6 @@ describe('/videos', () => {
             .send(video1)
             .expect(201)
 
-        console.log(res.status) // можно посмотреть ответ эндпоинта
-        console.log(res.body) // можно посмотреть ответ эндпоинта
         video1 = res.body
     })
 
@@ -50,13 +44,10 @@ describe('/videos', () => {
             availableResolution: ['P360']
         }
 
-        const res = await req
+        await req
             .post(SETTINGS.PATH.VIDEOS)
             .send(video2)
             .expect(400)
-
-        console.log(res.status) // можно посмотреть ответ эндпоинта
-        console.log(res.body) // можно посмотреть ответ эндпоинта
     })
 
     it('should get not empty array', async () => {
@@ -85,8 +76,6 @@ describe('/videos', () => {
             .send(video3)
             .expect(201)
 
-        console.log(res.status) // можно посмотреть ответ эндпоинта
-        console.log(res.body) // можно посмотреть ответ эндпоинта
         video3 = res.body
     })
 
@@ -97,8 +86,6 @@ describe('/videos', () => {
             .get(SETTINGS.PATH.VIDEOS)
             .expect(200)
 
-        console.log(res.body)
-
         expect(res.body.length).toBe(2)
         // expect(res.body[0]).toEqual(dataset1.videos[0])
     })
@@ -107,55 +94,40 @@ describe('/videos', () => {
         const res = await req
             .get(`${SETTINGS.PATH.VIDEOS}/${video3.id}`)
             .expect(200)
+
         expect(res.body).toEqual(video3)
-
-        console.log(res.status)
-        console.log(res.body)
-
     })
 
     it('should\t be find video1 in db with incorrect data', async () => {
-        const res = await req
+    await req
             .get(`${SETTINGS.PATH.VIDEOS}/1`)
             .expect(404)
-
-        console.log(res.status)
-        console.log(res.body)
-
     })
 
     it('should be delete video3 in db witch correct data', async () => {
-        const res = await req
+    await req
             .delete(`${SETTINGS.PATH.VIDEOS}/${video3.id}`)
             .expect(204)
 
-        console.log(res.status)
-        console.log(res.body)
-
-        const res2 = await req
+        const res = await req
             .get(SETTINGS.PATH.VIDEOS)
             .expect(200)
 
-        console.log(res2.body)
-
-        expect(res2.body.length).toBe(1)
+        expect(res.body.length).toBe(1)
     })
 
     it('shouldn\'t be delete video in db witch incorrect data', async () => {
-        const res = await req
+        await req
             .delete(`${SETTINGS.PATH.VIDEOS}/0`)
             .expect(404)
 
-        console.log(res.status)
-        console.log(res.body)
-
-        const res2 = await req
+        const res = await req
             .get(SETTINGS.PATH.VIDEOS)
             .expect(200)
 
-        console.log(res2.body)
+        console.log(res.body)
 
-        expect(res2.body.length).toBe(1)
+        expect(res.body.length).toBe(1)
     })
 
     it('should update video1 with correct data', async () => {
@@ -171,20 +143,18 @@ describe('/videos', () => {
             publicationDate: '2024-08-03T21:13:05.387Z'
         }
 
-        const changedVideo1 = Object.assign({}, video1, newData)
+        const changedVideo = Object.assign({}, video1, newData)
 
-        const res = await req
+        await req
             .put(`${SETTINGS.PATH.VIDEOS}/${video1.id}`)
             .send(newData)
             .expect(204)
 
-        const res2 = await req
+        const res = await req
             .get(`${SETTINGS.PATH.VIDEOS}/${video1.id}`)
             .expect(200)
 
-        expect(res2.body).toEqual(changedVideo1)
-        console.log(res2.status)
-        console.log(res2.body)
+        expect(res.body).toEqual(changedVideo)
     })
 
     it('shouldn\'t update video1 with incorrect data', async () => {
@@ -201,51 +171,16 @@ describe('/videos', () => {
             publicationDate: '2024-08-04T24:21:33.000Z'
         }
 
-        const changedVideo1 = Object.assign({}, video1, newData)
+        const changedVideo = Object.assign({}, video1, newData)
 
-        const res = await req
+        await req
             .put(`${SETTINGS.PATH.VIDEOS}/${video1.id}`)
             .send(newData)
             .expect(400)
 
-        console.log(res.body)
+        const res = await req
+            .get(`${SETTINGS.PATH.VIDEOS}/${video1.id}`)
 
-        // const res2 = await req
-        //     .get(`${SETTINGS.PATH.VIDEOS}/${video1.id}`)
-        //     .expect(200)
-        //
-        // expect(res2.body).toEqual(changedVideo1)
-        // console.log(res2.status)
-        // console.log(res2.body)
+        expect(res).not.toEqual(changedVideo)
     })
-
-
-    // it('should create', async () => {
-    //     setDB()
-    //     const newVideo: any /*InputVideoType*/ = {
-    //         title: 't1',
-    //         author: 'a1',
-    //         availableResolution: ['P144' /*Resolutions.P144*/]
-    //         // ...
-    //     }
-    //
-    //     const res = await req
-    //         .post(SETTINGS.PATH.VIDEOS)
-    //         .send(newVideo) // отправка данных
-    //         .expect(201)
-    //
-    //     console.log(res.body)
-    //
-    //     expect(res.body.availableResolution).toEqual(newVideo.availableResolution)
-    // })
-
-    // it('shouldn\'t find', async () => {
-    //     setDB(dataset1)
-    //
-    //     const res = await req
-    //         .get(SETTINGS.PATH.VIDEOS + '/1')
-    //         .expect(404) // проверка на ошибку
-    //
-    //     console.log(res.body)
-    // })
 })
